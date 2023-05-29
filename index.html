@@ -1,12 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Home</title>
+    <meta charset="utf-8">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: "Helvetica", "Arial","LiHei Pro","黑體-繁","微軟正黑體", sans-serif;
+        }
+
+        input, select, button {
+            font-family: inherit;
+            font-size: inherit;
+        }
+    </style>
+    <script src="aes.js"></script>
+    <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js'></script>-->
+    <script>
+        var key = "free_haha%%"// "wfublog"
+        function doAction() {
+            var word = document.getElementById("word").value;
+
+            if (document.getElementById("enctypt").checked) {
+                word = CryptoJS.AES.encrypt(word, key).toString();
+
+            } else {
+                word = CryptoJS.AES.decrypt(word, key).toString(CryptoJS.enc.Utf8);
+            }
+
+            document.getElementById("result").textContent = word;
+        }
+
+        function textChange(obj) {
+            document.getElementById("btn").textContent = obj.value;
+        }
+
+
+        function copy() {
+            // 建立 Range 物件
+            const range = document.createRange();
+            // 將指定元素內容加到 Range 中
+            const texts = document.getElementById('result');
+            range.selectNodeContents(texts);
+            // 取得 Selection 物件
+            const selection = window.getSelection();
+            // 先清空當前選取範圍
+            selection.removeAllRanges();
+            // 加入 Range
+            selection.addRange(range);
+
+            document.execCommand('copy');
+            selection.removeAllRanges();
+        }
+
+    </script>
 </head>
- 
-<body>
-Hi
+
+<body style="padding:8px">
+    <div style="padding:8px">
+        <input type="radio" id="enctypt" name="type" value="加密" onchange="textChange(this)" checked> 加密
+        <input type="radio" id="dectypt" name="type" value="解密" onchange="textChange(this)"> 解密
+    </div>
+    <div style="padding:8px">
+        <input type="search" id="word" value="">
+        <button type="button" id="btn" onclick="doAction()">加密</button>
+    </div>
+    <div style="padding:8px">
+        結果：
+        <button type="button" id="btnCopy" onclick="copy()">Copy</button>
+        <p id="result"></p>
+    </div>
 </body>
- 
+
 </html>
